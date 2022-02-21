@@ -1,22 +1,4 @@
-using Pkg
-
-function check_install_package(package_name::String)
-    if  !(package_name in keys(Pkg.installed()))
-        println(package_name)
-        Pkg.add(package_name)
-    end
-end
-
-# Check to see if PDFIO is installed, if it's not install it
-check_install_package("PDFIO")
 using PDFIO
-
-# Check to see if JSON is installed, if it's not install it
-# check_install_package("JSON")
-# using JSON
-
-# Check to see if PyCall is installed, if it's not install it
-check_install_package("PyCall")
 using PyCall
 arxiv = pyimport("arxiv")
 
@@ -84,6 +66,12 @@ function get_PDF_data(src, out)
 end
 
 function process_PDFs(pdf_path::String, data_folder::String)
+    """
+    Parses PDFs and turns them into txt files and saves them.
+
+    pdf_path (str): Path where PDFs are stored.
+    data_folder (str): path to where the txt files should be saved.
+    """
     for file_name in readdir(pdf_path)
         get_PDF_data(pdf_path*file_name, replace(data_folder*file_name, ".pdf"=>".txt"))
     end
@@ -98,7 +86,7 @@ function save_pdfs(search, file_path::String)
     """
     # Iterate over results
     for result in search.results()
-        result.download_pdf(dirpath=file_path,filename=result.get_short_id()*".pdf") # save pdf where filename is Articles short ID
+        result.download_pdf(dirpath=file_path,filename=replace(result.get_short_id()*".pdf", "/"=>"-" ))# save pdf where filename is Articles short ID
     end
 end
 
@@ -113,12 +101,15 @@ function empty_pdfs(pdf_path::String)
     end
 end
 
-function retrieve_texts(query_string::String, num_results::Int, data_folder::String; keep_pdfs=true, pdf_path=pwd()*"/pdfs/")
-    """ TODO Finish this documentation
+function retrieve_texts(query_string::String, num_results::Int, data_folder=pwd()*"/data/"; keep_pdfs=true, pdf_path=pwd()*"/pdfs/")
+    """
     Retrieves PDF(s) from ARXIV, turns them into text files, and saves them to a designated folder
 
     query_string (str): query formatted in API format (https://arxiv.org/help/api/user-manual#query_details).
     num_results (int): number of results to return.
+    data_folder (str): path to where the txt files should be saved. Defaults to a folder called "data" within the dark-data directory.
+    keep_pdfs (bool): whether or not the original PDFs should be saved. Defaults to true.
+    pdf_path (str): Where the PDFs will be stored. Defaults to a folder called "pdfs" within the dark-data directory.
     """
     search = search_arxiv(query_string,num_results)
     save_pdfs(search, pdf_path)
@@ -131,7 +122,7 @@ function retrieve_texts(query_string::String, num_results::Int, data_folder::Str
 end
 
 function example()
-    query_string = """ti:%22code availability%22"""
-    num_results = 1
-    retrieve_texts(query_string, num_results, pwd()*"/data/")
+    query_string = """quantum"""
+    num_results = 10
+    retrieve_texts(query_string, num_results)
 end
