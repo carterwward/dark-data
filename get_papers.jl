@@ -122,7 +122,7 @@ function retrieve_texts(query_string::String, num_results::Int, data_folder=pwd(
 end
 
 function example()
-    query_string = """quantum"""
-    num_results = 10
+    query_string = """ti:%22code availability%22"""
+    num_results = 1
     retrieve_texts(query_string, num_results)
 end
