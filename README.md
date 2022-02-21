@@ -30,5 +30,5 @@ To get papers of your own, you want to use the retrieve_texts function. While th
 
 A function call would look something like:
 ```
-retrieve_texts("quantum", 10)
+retrieve_texts("code availability", 10)
 ```
