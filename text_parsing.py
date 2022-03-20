@@ -13,7 +13,8 @@ def pad_punctuation(text):
 
 link_pattern = re.compile(r'(?<=\s|\/|:)\b[https:\/\/]*[http:\/\/]*\w+\.\S+\b')
 email_pattern = re.compile(r'\b\S+@\S+\b')
-link_flag_words = ["data","dataset","access","obtain","get","copy","go to","repo","repository","github","link"]
+link_flag_words = ["data","dataset","access","obtain","get","copy","go to","repo","repository","github","link","retrieved","from","public","publicly","available"]
+
 email_flag_words = ["data","dataset","access","obtain","get","copy"]
 
 def find_likely(text, chunk_size, pattern, flag_words):
